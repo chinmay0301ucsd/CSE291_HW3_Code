@@ -1,0 +1,55 @@
+datapath: /home/ubuntu/CSE291/HW3/bottles
+savepath: /home/ubuntu/CSE291/HW3/NeRF_CT/models/bottles
+# pretrained_path: null #/home/ubuntu/CSE291/HW3/NeRF_CT/models/bottles/bottles_200k_0.5shift/1670435683.5149221.pth #null #/home/ubuntu/CSE291/HW3/NeRF_CT/models/bottles/bottles_200k_final/1669457829.7811985.pth
+pretrained_path: /home/ubuntu/CSE291/HW3/NeRF_CT/models/bottles/bottles_with_pretrained_init/1670565643.541455.pth 
+pretrained_pathC: /home/ubuntu/CSE291/HW3/NeRF_CT/models/bottles/bottles_with_hier_from_pretrained/1670637845.754538C.pth
+pretrained_pathF: /home/ubuntu/CSE291/HW3/NeRF_CT/models/bottles/bottles_with_hier_from_pretrained/1670637845.754538F.pth 
+
+# /home/ubuntu/CSE291/HW3/NeRF_CT/models/bottles/bottles_pretrain_20imgs/1670552406.6664047.pth # /home/ubuntu/CSE291/HW3/NeRF_CT/models/bottles/bottles_200k_0.5shift_hierarchical/1670539201.1619503.pth
+exp_name: bottles_with_hier_from_pretrained
+lr_init: 0.0001
+lr_final: 0.00005
+Nf: 64
+Nc: 128 # coarse and fine is not implemented yet
+tn: 1
+tf: 6
+# Lp: 0
+# Ld: 0
+decay_step: 100
+decay_rate: 0.1
+flip_ray_dir: False # if true, flips the ray in opposite direction
+combine_tv: False
+num_iters: 200000
+ckpt_model: 5000
+ckpt_loss: 100
+ckpt_images: 1000
+test_images: 5000
+batch_size: 4000
+render_batch_size: 8000
+res_factor: 1
+val_idxs: [5,10]
+test_idxs: [0,16, 55, 93, 160]
+num_train_imgs: -1 # -1 to use all images in the train set
+
+test_params:
+  batch_size: 16000
+  res_factor: 1
+  loadpathC: /home/ubuntu/CSE291/HW3/NeRF_CT/models/bottles/bottles_with_hier_from_pretrained/1670637845.754538C.pth
+  loadpathF: /home/ubuntu/CSE291/HW3/NeRF_CT/models/bottles/bottles_with_hier_from_pretrained/1670637845.754538F.pth 
+
+  # loadpathC: /home/ubuntu/CSE291/HW3/NeRF_CT/models/bottles/bottles_200k_0.5shift/1670435683.5149221.pth
+  # loadpathF: /home/ubuntu/CSE291/HW3/NeRF_CT/models/bottles/bottles_200k_0.5shift/1670435683.5149221.pth
+
+  datapath: /home/ubuntu/CSE291/HW3/bottles
+  savepath: /home/ubuntu/CSE291/HW3/NeRF_CT/results/bottles
+  exp_name: bottles_hier_test_tn1.4_tf6
+  im_set: test
+  im_idxs: [0,16,55,93,160] # renders rgb and depth for these indices from im_set
+  animation: False # if True, only renders video 
+  num_poses: 30
+  theta: 30
+  Nf: 128
+  Nc: 256 # coarse and fine is not implemented yet
+  tn: 1.4
+  tf: 6
+  

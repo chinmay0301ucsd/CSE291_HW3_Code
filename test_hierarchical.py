@@ -29,7 +29,7 @@ def img_psnr(gt, pred):
 
 
 def test(params):
-	assert os.path.exists(params['loadpath']), "model path doesn't exist"
+	assert os.path.exists(params['loadpathC']), "model path doesn't exist"
 	if not os.path.exists(os.path.join(params['savepath'], params['exp_name'])):
 		os.makedirs(os.path.join(params['savepath'], params['exp_name']))
 	
@@ -57,16 +57,21 @@ def test(params):
 
 	with torch.no_grad():
 		for idx in idxs:
-			(rgbc_img, rgbf_img), depth_img, gt_img = render_image_Hier(netC, netF, rg, batch_size=params['render_batch_size'],\
+			(rgbc_img, rgbf_img), depth_img, gt_img = render_image_Hier(netC, netF, rg, batch_size=params['batch_size'],\
 														       im_idx=idx, im_set=im_set, Nc=params['Nc'], Nf=params['Nf'],\
 														       tn=params['tn'], tf=params['tf'])
-			avg_psnr += img_psnr(gt_img, rgbf_img)
+			if im_set != 'test':
+				avg_psnr += img_psnr(gt_img, rgbf_img)
 
-			rgb_out = torch.cat((torch.from_numpy(gt_img), rgbf_img),axis=0)
+			if im_set!= 'test':
+				rgb_out = torch.cat((torch.from_numpy(gt_img), rgbf_img),axis=0)
+			else:
+				rgb_out = rgbf_img
 			save_image(make_grid(rgb_out.permute(0,3,1,2)), os.path.join(params['savepath'], params['exp_name'], f'rgb_{idx}.png'))
 			save_image(make_grid(depth_img.permute(0,3,1,2)), os.path.join(params['savepath'], params['exp_name'], f'depth_{idx}.png'))
-		avg_psnr = avg_psnr / len(idxs)
-		print(f"Average PSNR : {avg_psnr}")
+		if im_set != 'test':
+			avg_psnr = avg_psnr / len(idxs)
+			print(f"Average PSNR : {avg_psnr}")
 
 if __name__=="__main__":
 	parser = argparse.ArgumentParser(description='NeRF scene')
